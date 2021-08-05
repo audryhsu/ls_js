@@ -9,15 +9,13 @@ function checkWinner() {
     return false;
   } else if ((USER_SCORE === 3)) {
     console.log('You won best of 5!');
-    return true
-  }
-    else if (COMP_SCORE === 3){
-      console.log('Computer beat you!');
-      prompt(`----------- FINAL SCORE ----------`);
-      prompt(`USER: ${USER_SCORE}  COMPUTER: ${COMP_SCORE}`);
-      return true;
-  }
-  else {
+    return true;
+  } else if (COMP_SCORE === 3) {
+    console.log('Computer beat you!');
+    prompt(`----------- FINAL SCORE ----------`);
+    prompt(`USER: ${USER_SCORE}  COMPUTER: ${COMP_SCORE}`);
+    return true;
+  } else {
     return false;
   }
 
@@ -68,6 +66,6 @@ while (true) {
   if (answer[0] === 'n' ) {
     break;
   }
-  ROUND +=1;
+  ROUND += 1;
 
 }
