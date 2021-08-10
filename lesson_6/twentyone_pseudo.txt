@@ -1,0 +1,47 @@
+Problem
+
+Examples & Test cases
+Data Structures
+- deck as an array of 52 cards
+- hands:
+hand = {
+0: 2,
+1: 10,
+2: 6, ...
+}
+
+- show first card in dealer and players hand
+- add cards
+- sum value cards
+- order doesn't matter?
+
+Calculating Aces
+- default to 11
+- sum hand; if 11 causes hand to bust, then ace value is 1
+
+1. Initialize deck
+2. Deal cards to player and dealer
+3. Player turn: hit or stay
+   - while loop repeat until bust or stay
+4. If player bust, dealer wins.
+5. Dealer turn: hit or stay
+   - repeat until total >= 17
+6. If dealer busts, player wins.
+7. Compare cards and declare winner.
+
+helper functions
+- busted --> sum up hand and see if it > 21
+- dealStartingHand()
+- dealCard()
+  - select card from remaining deck at random
+  - remove selected card from deck
+  - add it to hand
+- revealHands(playerHand, dealerHand)
+  -output => sum of each hand in an object
+- dealerMove(dealerHand)
+  - check if <= 17
+  - if <= 17, dealCard(dealderHand)
+  - >17, stay
+- calculateWinner(playerSum, dealerSum)
+  - compare playerSum and dealerSum for closest to 21
+  - print winner

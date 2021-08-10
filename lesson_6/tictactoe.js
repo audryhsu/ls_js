@@ -14,6 +14,9 @@ let WINNING_LINES = [
   [1, 5, 9],
   [3, 5, 7] // diagonals
 ];
+let FIRST_MOVE = '';
+let FIRST_TURN = true;
+let PREVIOUS_TURN;
 
 function displayBoard(board) {
   console.clear();
@@ -132,14 +135,68 @@ function computerChoosesSquare(board) {
 function findAtRiskSquare(line, board) {
   let markersInLine = line.map(square => board[square]);
 
+  // Find offensive square opportunity
+  if (markersInLine.filter(val => val === COMPUTER_MARKER).length === 2) {
+    let unusedSquare = line.find(square => board[square] === INITIAL_MARKER);
+    if (unusedSquare !== undefined) {
+      return unusedSquare;
+    }
+  }
+  // Finding defensive square if no offensive move
   if (markersInLine.filter(val => val === HUMAN_MARKER).length === 2) {
     let unusedSquare = line.find(square => board[square] === INITIAL_MARKER);
     if (unusedSquare !== undefined) {
       return unusedSquare;
     }
   }
+  // Else pick square #5
+  if (board[5] === INITIAL_MARKER) return 5;
+
   return null;
 }
+
+function chooseSquare(board) {
+  // First turn of the game
+  if (FIRST_TURN) {
+    FIRST_TURN = false;
+    if (FIRST_MOVE === 'player') {
+      PREVIOUS_TURN = 'player';
+      return playerChoosesSquare(board);
+    }
+    if (FIRST_MOVE === 'computer') {
+      PREVIOUS_TURN = 'computer'
+      return computerChoosesSquare(board);
+    }
+    else {
+      // Ask user who should go first
+      FIRST_MOVE = readline.question('Who should go first? player or computer?\n');
+
+      if (FIRST_MOVE === 'player') {
+        PREVIOUS_TURN = 'player';
+        return playerChoosesSquare(board);
+      }
+      if (FIRST_MOVE === 'computer') {
+        PREVIOUS_TURN = 'computer'
+        return computerChoosesSquare(board);
+      }
+    }
+  }
+  // Swap turns
+  else {
+    if (PREVIOUS_TURN === 'player') {
+      PREVIOUS_TURN = 'computer';
+      return computerChoosesSquare(board);
+    }
+    PREVIOUS_TURN = 'player';
+    return playerChoosesSquare(board);
+  }
+}
+function inputIsValid(input) {
+  let validInputs = ['y', 'Y', 'n', 'N'];
+  return validInputs.includes(input.trim());
+
+}
+
   //////////// GAME PLAY //////////////////////
 
   while (true) {
@@ -149,17 +206,13 @@ function findAtRiskSquare(line, board) {
     // Loop through gameplay
     while (true) {
       displayBoard(board);
-      playerChoosesSquare(board);
+      // Determine whose turn and make a move
+      chooseSquare(board);
       // break if condition met -- someone wins or no more squares left
       if (someoneWon(board) || boardFull(board)) break;
-
-      // Computer defends against threat of player winning
-      computerChoosesSquare(board);
-      displayBoard(board);
-      if (someoneWon(board) || boardFull(board)) break;
     }
-
     displayBoard(board);
+
     // Declare winner
     if (someoneWon(board)) {
       prompt(`${detectWinner(board)} won!`);
@@ -177,8 +230,11 @@ function findAtRiskSquare(line, board) {
     --------------------
           `)
 
-    answer = readline.question("Would you like to play again? Y/N ");
-    if (answer[0].toUpperCase().trim() === 'N') break;
+    let answer;
+    do {
+      answer = readline.question("Would you like to play again? Y/N ");
+    } while (!inputIsValid(answer));
 
+    if (answer.toLowerCase() === 'n') break;
   }
   prompt('Thanks for playing!');
