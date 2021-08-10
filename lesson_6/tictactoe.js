@@ -1,3 +1,6 @@
+// tic tac toe game
+// TODO: build an unbeatable Tic Tac Toe by utilizing the minimax algorithm
+
 const readline = require('readline-sync');
 const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
