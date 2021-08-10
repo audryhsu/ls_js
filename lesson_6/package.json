@@ -1,0 +1,21 @@
+{
+  "name": "lesson_6",
+  "version": "1.0.0",
+  "description": "trying init",
+  "main": "break.js",
+  "dependencies": {
+    "native": "^0.3.3",
+    "natives": "^1.1.6",
+    "readline-sync": "^1.4.10"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "console.log('hi')"
+  },
+  "repository": {
+    "type": "git",
+    "url": "auhsu"
+  },
+  "author": "auhsu",
+  "license": "ISC"
+}
