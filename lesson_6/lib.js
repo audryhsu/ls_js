@@ -35,7 +35,7 @@ function shuffleDeck(deck) {
 }
 
 function showHands(playerHand, dealerHand) {
-  prompt(`Dealer has: ${dealerHand[0]} and unknown.`);
+  prompt(`Dealer has: ${dealerHand[0]} and ??`);
   // let hand = playerHand.map(card => card[1]).join(', ');
   prompt(`You have: ${playerHand}`);
   prompt(`Your hand value: ${total(playerHand)}.`);
@@ -53,7 +53,7 @@ function dealStartingHand(deck, playerHand, dealerHand) {
 function dealCard(hand, deck) {
   let card = deck.shift();
   hand.push(card);
-  console.log(`Card dealt.`);
+  // console.log(`Card dealt.`);
   return card;
 }
 
@@ -89,7 +89,8 @@ function busted(handSum) {
 function playerTurn(playerHand, deck) {
   let playerTotal;
   while (true) {
-    let answer = readline.question('Player: hit or stay?\n');
+    prompt("Player: hit or stay?");
+    let answer = readline.question();
     if (answer.trim().toLowerCase() === 'stay') break;
     dealCard(playerHand, deck);
     playerTotal = total(playerHand);
@@ -105,6 +106,7 @@ function dealerTurn(dealerHand, deck) {
   let dealerTotal = total(dealerHand);
   while (dealerTotal <= 17) {
     dealCard(dealerHand, deck);
+    prompt('Dealer hits.');
     dealerTotal = total(dealerHand);
     if (busted(dealerTotal)) break;
   }

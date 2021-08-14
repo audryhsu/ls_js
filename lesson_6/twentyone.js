@@ -10,9 +10,13 @@ let DECK = createDeck();
 let PLAYER_SCORE = 0;
 let DEALER_SCORE = 0;
 
+// Welcome message
+prompt('Welcome to twenty-one! Best out of 5 wins!');
+
+
 // Game play
 while (PLAYER_SCORE < 3 && DEALER_SCORE < 3) {
-  console.clear();
+  console.log('');
   console.log('-------------- SCORE BOARD -------------------');
   console.log(`PLAYER: ${PLAYER_SCORE}`);
   console.log(`DEALER: ${DEALER_SCORE}`);
@@ -20,8 +24,9 @@ while (PLAYER_SCORE < 3 && DEALER_SCORE < 3) {
 
   let PLAYER_HAND = [];
   let DEALER_HAND = [];
+  console.log('===============================================');
   dealStartingHand(DECK, PLAYER_HAND, DEALER_HAND);
-
+  console.log('===============================================');
   let dealerTotal = total(DEALER_HAND);
   let playerTotal = total(PLAYER_HAND);
 
@@ -51,9 +56,10 @@ while (PLAYER_SCORE < 3 && DEALER_SCORE < 3) {
 
   if (PLAYER_SCORE >= 3 || DEALER_SCORE >= 3) break;
   if (!playAgain()) break;
+  console.clear();
 }
 prompt('Thanks for playing!');
-
+console.log(' ');
 console.log('-------------- FINAL SCORE -------------------');
 console.log(`PLAYER: ${PLAYER_SCORE}`);
 console.log(`DEALER: ${DEALER_SCORE}`);
