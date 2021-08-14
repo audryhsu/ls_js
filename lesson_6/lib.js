@@ -2,7 +2,7 @@
 
 // export file as a module
 module.exports = { prompt, createDeck, shuffleDeck, dealStartingHand,
-  dealCard, total, busted, showHands, playerTurn,
+  dealCard, total, busted, playerTurn,
   dealerTurn, calculateWinner, playAgain, displayWinner };
 
 // import readline sync module
@@ -34,6 +34,13 @@ function shuffleDeck(deck) {
   }
 }
 
+function showHands(playerHand, dealerHand) {
+  prompt(`Dealer has: ${dealerHand[0]} and unknown.`);
+  // let hand = playerHand.map(card => card[1]).join(', ');
+  prompt(`You have: ${playerHand}`);
+  prompt(`Your hand value: ${total(playerHand)}.`);
+}
+
 function dealStartingHand(deck, playerHand, dealerHand) {
   shuffleDeck(deck);
   while (playerHand.length < 2) {
@@ -47,6 +54,7 @@ function dealCard(hand, deck) {
   let card = deck.shift();
   hand.push(card);
   console.log(`Card dealt.`);
+  return card;
 }
 
 function total(hand) {
@@ -77,45 +85,47 @@ function busted(handSum) {
   return false;
 }
 
-function showHands(playerHand, dealerHand) {
-  prompt(`Dealer has: ${dealerHand[0][1]} and unknown.`);
-  let hand = playerHand.map(card => card[1]).join(', ');
-  prompt(`You have: ${hand}`);
-  prompt(`Your hand value: ${total(playerHand)}.`);
-}
 
 function playerTurn(playerHand, deck) {
+  let playerTotal;
   while (true) {
     let answer = readline.question('Player: hit or stay?\n');
     if (answer.trim().toLowerCase() === 'stay') break;
     dealCard(playerHand, deck);
-    prompt(`Your hand: ${playerHand}. Hand value: ${total(playerHand)}.`);
+    playerTotal = total(playerHand);
+    prompt(`Your hand: ${playerHand}. Hand value: ${playerTotal}.`);
     // Check if busted
-    if (busted(total(playerHand))) break;
+    if (busted(playerTotal)) break;
   }
-  return playerHand;
+  return playerTotal;
 }
 
 function dealerTurn(dealerHand, deck) {
   prompt('Dealer turn...');
-  while (total(dealerHand) <= 17) {
-    // console.log('Dealer hand is <= 17. Dealer +1 card.');
+  let dealerTotal = total(dealerHand);
+  while (dealerTotal <= 17) {
     dealCard(dealerHand, deck);
-    if (busted(total(dealerHand))) break;
+    dealerTotal = total(dealerHand);
+    if (busted(dealerTotal)) break;
   }
   prompt('Dealer stays.');
-  return dealerHand;
+  return dealerTotal;
 }
 
 function calculateWinner(playerHand, dealerHand) {
+  let playerTotal = total(playerHand);
+  let dealerTotal = total(dealerHand);
   prompt('Time to reveal your hands...!');
-  showHandValues(playerHand, dealerHand);
-  if (!busted(total(playerHand)) && !busted(total(dealerHand))) {
-    if (total(playerHand) > total(dealerHand)) {
-      return displayWinner('Player');
+  prompt(`Dealer hand value: ${dealerTotal}`);
+  prompt(`Player hand value: ${playerTotal}`);
+  if (!busted(playerTotal) && !busted(dealerTotal)) {
+    if (playerTotal > dealerTotal) {
+      displayWinner('Player');
+      return 'Player';
     }
-    if (total(dealerHand) > total(playerHand)) {
-      return displayWinner('Dealer');
+    if (dealerTotal > playerTotal) {
+      displayWinner('Dealer');
+      return 'Dealer';
     } else {
       return prompt('Tied game.');
     }
@@ -123,11 +133,6 @@ function calculateWinner(playerHand, dealerHand) {
 }
 function displayWinner(winner) {
   prompt(`${winner} won the game!`);
-}
-
-function showHandValues(playerHand, dealerHand) {
-  prompt(`Dealer hand value: ${total(dealerHand)}`);
-  prompt(`Player hand value: ${total(playerHand)}`);
 }
 
 function inputIsValid(input) {
