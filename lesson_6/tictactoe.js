@@ -6,8 +6,8 @@ const readline = require('readline-sync');
 const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
-let human_score = 0;
-let computer_score = 0;
+let HUMAN_SCORE = 0;
+let COMPUTER_SCORE = 0;
 let WINNING_LINES = [
   [1, 2, 3],
   [4, 5, 6],
@@ -167,10 +167,9 @@ function chooseSquare(board) {
       return playerChoosesSquare(board);
     }
     if (FIRST_MOVE === 'computer') {
-      PREVIOUS_TURN = 'computer'
+      PREVIOUS_TURN = 'computer';
       return computerChoosesSquare(board);
-    }
-    else {
+    } else {
       // Ask user who should go first
       do {
         FIRST_MOVE = readline.question('Who should go first? player or computer?\n');
@@ -181,13 +180,12 @@ function chooseSquare(board) {
         return playerChoosesSquare(board);
       }
       if (FIRST_MOVE.toLowerCase() === 'computer') {
-        PREVIOUS_TURN = 'computer'
+        PREVIOUS_TURN = 'computer';
         return computerChoosesSquare(board);
       }
     }
-  }
-  // Swap turns
-  else {
+    // Swap turns
+  } else {
     if (PREVIOUS_TURN === 'player') {
       PREVIOUS_TURN = 'computer';
       return computerChoosesSquare(board);
@@ -202,48 +200,48 @@ function inputIsValid(input, validInputs) {
 
 }
 
-  //////////// GAME PLAY //////////////////////
-  // Welcome message
-  console.clear();
-  prompt('Welcome to tic tac toe! Best out of 5 wins!');
+//////////// GAME PLAY //////////////////////
+// Welcome message
+console.clear();
+prompt('Welcome to tic tac toe! Best out of 5 wins!');
 
+while (true) {
+  // Initialize empty board
+  let board = initializeBoard();
+
+  // Loop through gameplay
   while (true) {
-    // Initialize empty board
-    let board = initializeBoard();
-
-    // Loop through gameplay
-    while (true) {
-      displayBoard(board);
-      // Determine whose turn and make a move
-      chooseSquare(board);
-      // break if condition met -- someone wins or no more squares left
-      if (someoneWon(board) || boardFull(board)) break;
-    }
     displayBoard(board);
-
-    // Declare winner
-    if (someoneWon(board)) {
-      prompt(`${detectWinner(board)} won!`);
-      if (detectWinner(board) === 'Player') human_score += 1;
-      else {
-        computer_score += 1;
-      }
-    } else {
-      prompt("It's a tie!");
-    }
-
-    console.log('');
-    console.log('-------------- SCORE BOARD -------------------');
-    console.log(`HUMAN: ${human_score}`);
-    console.log(`COMPUTER: ${computer_score}`);
-    console.log('----------------------------------------------');
-
-    let answer;
-    do {
-      answer = readline.question("Would you like to play again? Y/N ");
-    } while (!inputIsValid(answer, ['y', 'Y', 'n', 'N']));
-
-    if (answer.toLowerCase() === 'n') break;
-    console.clear();
+    // Determine whose turn and make a move
+    chooseSquare(board);
+    // break if condition met -- someone wins or no more squares left
+    if (someoneWon(board) || boardFull(board)) break;
   }
-  prompt('Thanks for playing!');
+  displayBoard(board);
+
+  // Declare winner
+  if (someoneWon(board)) {
+    prompt(`${detectWinner(board)} won!`);
+    if (detectWinner(board) === 'Player') HUMAN_SCORE += 1;
+    else {
+      COMPUTER_SCORE += 1;
+    }
+  } else {
+    prompt("It's a tie!");
+  }
+
+  console.log('');
+  console.log('-------------- SCORE BOARD -------------------');
+  console.log(`HUMAN: ${HUMAN_SCORE}`);
+  console.log(`COMPUTER: ${COMPUTER_SCORE}`);
+  console.log('----------------------------------------------');
+
+  let answer;
+  do {
+    answer = readline.question("Would you like to play again? Y/N ");
+  } while (!inputIsValid(answer, ['y', 'Y', 'n', 'N']));
+
+  if (answer.toLowerCase() === 'n') break;
+  console.clear();
+}
+prompt('Thanks for playing!');
