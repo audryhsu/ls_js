@@ -21,9 +21,7 @@ while (true) {
   if (busted(total(PLAYER_HAND))) {
     prompt('You busted!');
     displayWinner('Dealer');
-  }
-  // dealer turn
-  else if (!busted(total(PLAYER_HAND))) {
+  } else if (!busted(total(PLAYER_HAND))) {
     dealerTurn(DEALER_HAND, DECK);
     if (busted(total(DEALER_HAND))) {
       prompt('Dealer busted!');

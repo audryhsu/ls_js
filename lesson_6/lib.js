@@ -1,7 +1,9 @@
 // helper functions for twenty-one, a Blackjack-like game.
 
 // export file as a module
-module.exports = { prompt, createDeck, shuffleDeck, dealStartingHand, dealCard, alternatePlayers, total, busted, showHands, playerTurn, dealerTurn, calculateWinner, playAgain, displayWinner};
+module.exports = { prompt, createDeck, shuffleDeck, dealStartingHand,
+  dealCard, total, busted, showHands, playerTurn,
+  dealerTurn, calculateWinner, playAgain, displayWinner };
 
 // import readline sync module
 const readline = require('readline-sync');
@@ -12,24 +14,24 @@ function prompt(msg) {
 
 function createDeck() {
   var suits = ['S', 'D', 'C', 'H'];
-  var values = 'A123456789JQK'.split('')
+  var values = 'A123456789JQK'.split('');
   var deck = [];
+  var card;
 
   for (let i = 0; i < suits.length; i++) {
     for (let j = 0; j < values.length; j++) {
-      var card = [suits[i], values[j]];
+      card = [suits[i], values[j]];
       deck.push(card);
     }
   }
-  return deck
-
+  return deck;
 }
 
 function shuffleDeck(deck) {
   for (let index = deck.length - 1; index > 0; index--) {
-   let otherIndex = Math.floor(Math.random() * (index + 1)); // 0 to index
-   [deck[index], deck[otherIndex]] = [deck[otherIndex], deck[index]]; // swap elements
- }
+    let otherIndex = Math.floor(Math.random() * (index + 1)); // 0 to
+    [deck[index], deck[otherIndex]] = [deck[otherIndex], deck[index]]; // swap elements
+  }
 }
 
 function dealStartingHand(deck, playerHand, dealerHand) {
@@ -106,18 +108,16 @@ function dealerTurn(dealerHand, deck) {
 }
 
 function calculateWinner(playerHand, dealerHand) {
-  prompt('Time to reveal your hands...!')
+  prompt('Time to reveal your hands...!');
   showHandValues(playerHand, dealerHand);
   if (!busted(total(playerHand)) && !busted(total(dealerHand))) {
     if (total(playerHand) > total(dealerHand)) {
       return displayWinner('Player');
-
     }
     if (total(dealerHand) > total(playerHand)) {
       return displayWinner('Dealer');
-    }
-    else {
-      return prompt('Tied game.')
+    } else {
+      return prompt('Tied game.');
     }
   }
 }
