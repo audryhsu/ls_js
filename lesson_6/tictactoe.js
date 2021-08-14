@@ -1,4 +1,5 @@
 // tic tac toe game
+// @audryhsu
 // TODO: build an unbeatable Tic Tac Toe by utilizing the minimax algorithm
 
 const readline = require('readline-sync');
@@ -21,9 +22,8 @@ let FIRST_MOVE = '';
 let FIRST_TURN = true;
 let PREVIOUS_TURN;
 
-function displayBoard(board) {
-  console.clear();
 
+function displayBoard(board) {
   console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}.`);
   console.log('');
   console.log('     |     |');
@@ -122,15 +122,15 @@ function computerChoosesSquare(board) {
     let line = WINNING_LINES[index];
     square = findAtRiskSquare(line, board);
     if (square) {
-      console.log(`Square is ${square}`);
+      // console.log(`Square is ${square}`);
       break;
     }
   }
   if (!square) {
     let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
-    console.log(`Square is ${square}`);
+    // console.log(`Square is ${square}`);
     square = emptySquares(board)[randomIndex];
-    console.log(`Square is ${square}`);
+    // console.log(`Square is ${square}`);
   }
   board[square] = COMPUTER_MARKER;
 }
@@ -172,13 +172,15 @@ function chooseSquare(board) {
     }
     else {
       // Ask user who should go first
-      FIRST_MOVE = readline.question('Who should go first? player or computer?\n');
+      do {
+        FIRST_MOVE = readline.question('Who should go first? player or computer?\n');
+      } while (!inputIsValid(FIRST_MOVE, ['player','computer','COMPUTER','PLAYER']));
 
-      if (FIRST_MOVE === 'player') {
+      if (FIRST_MOVE.toLowerCase() === 'player') {
         PREVIOUS_TURN = 'player';
         return playerChoosesSquare(board);
       }
-      if (FIRST_MOVE === 'computer') {
+      if (FIRST_MOVE.toLowerCase() === 'computer') {
         PREVIOUS_TURN = 'computer'
         return computerChoosesSquare(board);
       }
@@ -194,13 +196,16 @@ function chooseSquare(board) {
     return playerChoosesSquare(board);
   }
 }
-function inputIsValid(input) {
-  let validInputs = ['y', 'Y', 'n', 'N'];
+function inputIsValid(input, validInputs) {
+
   return validInputs.includes(input.trim());
 
 }
 
   //////////// GAME PLAY //////////////////////
+  // Welcome message
+  console.clear();
+  prompt('Welcome to tic tac toe! Best out of 5 wins!');
 
   while (true) {
     // Initialize empty board
@@ -227,17 +232,18 @@ function inputIsValid(input) {
       prompt("It's a tie!");
     }
 
-    prompt(`--- SCORE BOARD ---
-    HUMAN: ${human_score}
-    COMPUTER: ${computer_score}
-    --------------------
-          `)
+    console.log('');
+    console.log('-------------- SCORE BOARD -------------------');
+    console.log(`HUMAN: ${human_score}`);
+    console.log(`COMPUTER: ${computer_score}`);
+    console.log('----------------------------------------------');
 
     let answer;
     do {
       answer = readline.question("Would you like to play again? Y/N ");
-    } while (!inputIsValid(answer));
+    } while (!inputIsValid(answer, ['y', 'Y', 'n', 'N']));
 
     if (answer.toLowerCase() === 'n') break;
+    console.clear();
   }
   prompt('Thanks for playing!');
