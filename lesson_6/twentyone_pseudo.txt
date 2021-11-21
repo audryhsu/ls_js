@@ -3,12 +3,11 @@ Problem
 Examples & Test cases
 Data Structures
 - deck as an array of 52 cards
-- hands:
-hand = {
-0: 2,
-1: 10,
-2: 6, ...
-}
+- hand is a nested array of suit and card value
+hand = [
+['H', '2'],
+['S', 'J']...
+]
 
 - show first card in dealer and players hand
 - add cards
@@ -30,18 +29,51 @@ Calculating Aces
 7. Compare cards and declare winner.
 
 helper functions
-- busted --> sum up hand and see if it > 21
-- dealStartingHand()
-- dealCard()
+- dealStartingHand(deck)
+- shuffleCards(deck) --> use Fisher-Yates formula
+  while cards in playerHand < 2:
+  - dealCard(playerHand, deck)
+  - dealCard(dealerHand, deck)
+
+
+- alternatePlayers(currentTurn)
+  - track who should be dealt a hand
+  - input --> player that just took dealer
+  - output --> other playershand
+  if currentTurn === player, set currentTurn === dealer
+
+- busted(total(sum))
+  - sum up hand and see if it > 21
+
+
+- showHands(playerHand, dealerHand)
+  - log "Dealer has": {card value} and unknown card
+  - log: "You have:" {list of all card values}
+
+- dealCard(currentTurn, deck)
   - select card from remaining deck at random
   - remove selected card from deck
-  - add it to hand
-- revealHands(playerHand, dealerHand)
-  -output => sum of each hand in an object
-- dealerMove(dealerHand)
-  - check if <= 17
-  - if <= 17, dealCard(dealderHand)
-  - >17, stay
+  - add it to hand of the currentTurn
+
+- total(hand)
+  - get value of all cards in hand
+  - if there is an Ace, determine if value is 11 or 1
+  - if card is J, Q, or K, value is 10
+  - return sum of hand
+
+
+- dealerTurn(dealerHand)
+  - total(hand)
+  - if total <= 17, dealCard(dealderHand)
+  - total(hand)
+  - if >17, stay
+  - Otherwise, go to #2
+
+- playerTurn(playerHand)
+  - Ask player to hit or stay.
+  - If stay, stop asking.
+  - Otherwise, go to #1.
+
 - calculateWinner(playerSum, dealerSum)
   - compare playerSum and dealerSum for closest to 21
   - print winner
