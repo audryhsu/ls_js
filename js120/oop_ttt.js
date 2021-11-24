@@ -206,37 +206,48 @@ class TTTGame {
      }).join("");
    }
 
-  computerMoves() {
-
-    let validChoices = this.board.unusedSquares();
-    let choice;
-    // START NEW CODE
-    function findAtRiskSquare(line, board) {
-      let markersInLine = line.map(square => board[square]);
-
-      // Find offensive square opportunity
-      if (markersInLine.filter(val => val === COMPUTER_MARKER).length === 2) {
-        let unusedSquare = line.find(square => board[square] === INITIAL_MARKER);
-        if (unusedSquare !== undefined) {
-          return unusedSquare;
-        }
+   offensiveMove() {
+     // returns square of key
+     for (let line = 0; line < TTTGame.POSSIBLE_WINNING_ROWS.length; line++) {
+      if (this.board.countMarkersFor(this.computer, TTTGame.POSSIBLE_WINNING_ROWS[line]) === 2) {
+        let row = TTTGame.POSSIBLE_WINNING_ROWS[line];
+        let key =  TTTGame.POSSIBLE_WINNING_ROWS[line].find(key => this.board.squares[key].isUnused(), this);
+        return key;
       }
-      // Finding defensive square if no offensive move
-      if (markersInLine.filter(val => val === HUMAN_MARKER).length === 2) {
-        let unusedSquare = line.find(square => board[square] === INITIAL_MARKER);
-        if (unusedSquare !== undefined) {
-          return unusedSquare;
-        }
-      }
-      // Else pick square #5
-      if (board[5] === INITIAL_MARKER) return 5;
-
+    }
       return null;
-    } // END NEW CODE
-    do {
-      choice = Math.floor((9 * Math.random()) + 1).toString();
-    } while (!validChoices.includes(choice));
+   }
 
+   defensiveMove() {
+     for (let line = 0; line < TTTGame.POSSIBLE_WINNING_ROWS.length; line++) {
+       if (this.board.countMarkersFor(this.human, TTTGame.POSSIBLE_WINNING_ROWS[line]) === 2) {
+         return TTTGame.POSSIBLE_WINNING_ROWS[line].find(key => this.board.squares[key].isUnused(), this);
+       }
+     }
+     return null;
+   }
+
+  computerMoves() {
+    let choice = this.offensiveMove();
+    let middleSquareKey = "5";
+    console.log("CHOICE AT 234:", choice);
+
+    if (!choice) {
+      choice = this.defensiveMove();
+      console.log("CHOICE AT 239:", choice);
+    }
+    if (!choice) {
+      if (this.board.unusedSquares().includes(middleSquareKey)) {
+        choice = middleSquareKey;
+        console.log("CHOICE AT 244:", choice);
+      } else {
+        let validChoices = this.board.unusedSquares();
+        console.log("VALID CHOICES:", validChoices);
+        do {
+          choice = Math.floor((9 * Math.random()) + 1).toString();
+        } while (!validChoices.includes(choice));
+      }
+    }
     this.board.markSquareAt(choice, this.computer.getMarker());
   }
 
