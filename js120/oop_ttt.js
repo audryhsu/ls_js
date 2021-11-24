@@ -98,6 +98,7 @@ class TTTGame {
     this.board = new Board();
     this.human = new Human();
     this.computer = new Computer();
+    this.score = {'human': 0, 'computer': 0}
   }
   play() {
     console.clear();
@@ -206,47 +207,50 @@ class TTTGame {
      }).join("");
    }
 
-   offensiveMove() {
-     // returns square of key
+   targetSquare(player) {
      for (let line = 0; line < TTTGame.POSSIBLE_WINNING_ROWS.length; line++) {
-      if (this.board.countMarkersFor(this.computer, TTTGame.POSSIBLE_WINNING_ROWS[line]) === 2) {
+      if (this.board.countMarkersFor(player, TTTGame.POSSIBLE_WINNING_ROWS[line]) === 2) {
         let row = TTTGame.POSSIBLE_WINNING_ROWS[line];
         let key =  TTTGame.POSSIBLE_WINNING_ROWS[line].find(key => this.board.squares[key].isUnused(), this);
         return key;
       }
     }
-      return null;
+    return null;
    }
 
+   offensiveMove() {
+     return this.targetSquare(this.computer);
+   }
    defensiveMove() {
-     for (let line = 0; line < TTTGame.POSSIBLE_WINNING_ROWS.length; line++) {
-       if (this.board.countMarkersFor(this.human, TTTGame.POSSIBLE_WINNING_ROWS[line]) === 2) {
-         return TTTGame.POSSIBLE_WINNING_ROWS[line].find(key => this.board.squares[key].isUnused(), this);
-       }
-     }
-     return null;
+     return this.targetSquare(this.human);
+   }
+
+   pickCenterSquare() {
+     let centerSquareKey = "5";
+     return this.board.unusedSquares().includes(centerSquareKey) ? centerSquareKey : null;
+   }
+
+   pickRandomSquare() {
+     let validChoices = this.board.unusedSquares();
+     let choice;
+     do {
+       choice = Math.floor((9 * Math.random()) + 1).toString();
+     } while (!validChoices.includes(choice));
+     return choice;
    }
 
   computerMoves() {
     let choice = this.offensiveMove();
-    let middleSquareKey = "5";
-    console.log("CHOICE AT 234:", choice);
 
     if (!choice) {
       choice = this.defensiveMove();
-      console.log("CHOICE AT 239:", choice);
+      // console.log("CHOICE AT 239:", choice);
     }
     if (!choice) {
-      if (this.board.unusedSquares().includes(middleSquareKey)) {
-        choice = middleSquareKey;
-        console.log("CHOICE AT 244:", choice);
-      } else {
-        let validChoices = this.board.unusedSquares();
-        console.log("VALID CHOICES:", validChoices);
-        do {
-          choice = Math.floor((9 * Math.random()) + 1).toString();
-        } while (!validChoices.includes(choice));
+      choice = this.pickCenterSquare();
       }
+    if (!choice) {
+      choice = this.pickRandomSquare();
     }
     this.board.markSquareAt(choice, this.computer.getMarker());
   }

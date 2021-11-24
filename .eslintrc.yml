@@ -1,6 +1,6 @@
 # Last update: 05 Oct 2020
 root: true
-parser: 
+parser:
 parserOptions:
   ecmaVersion: 6
   ecmaFeatures:
