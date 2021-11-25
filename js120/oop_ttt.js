@@ -307,11 +307,9 @@ class TTTGame {
 
   computerMoves() {
     let choice = this.offensiveMove();
-    console.log("CHOICE AT 314:", choice);
 
     if (!choice) {
       choice = this.defensiveMove();
-      console.log("CHOICE AT 318:", choice);
     }
     if (!choice) {
       choice = this.pickCenterSquare();
