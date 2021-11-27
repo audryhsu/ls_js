@@ -16,15 +16,9 @@ class Card {
     if (this.number === "A") return 11;
     return this.number;
   }
- }
+}
 
 class Deck {
-  static CLUB = '\u2663';
-  static SPADE ='\u2660';
-  static HEART = '\u2666';
-  static DIAMOND ='\u2666';
-  static SUITS = [Deck.HEART, Deck.SPADE, Deck.DIAMOND, Deck.CLUB];
-  static NUMBERS = [2,3,4,5,6,7,8,9,10, "J", "Q", "K", "A"];
 
   constructor() {
     this.cards = [];
@@ -43,11 +37,14 @@ class Deck {
     return card;
   }
 }
+Deck.CLUB = '\u2663';
+Deck.SPADE = '\u2660';
+Deck.HEART = '\u2666';
+Deck.DIAMOND = '\u2666';
+Deck.SUITS = [Deck.HEART, Deck.SPADE, Deck.DIAMOND, Deck.CLUB];
+Deck.NUMBERS = [2,3,4,5,6,7,8,9,10, "J", "Q", "K", "A"];
 
 class Participant {
-  static HIDDEN_CARD = `
-     ____
-    | ?? |`;
 
   constructor() {
     this.hand = [];
@@ -60,13 +57,18 @@ class Participant {
   }
 
   scoreHand() {
-    // sums total point values of participant's hand
-    let sum = this.hand.map(card => card.points).reduce((totalPoints, points) => totalPoints + points, 0);
+    let sum = this.hand
+      .map(card => card.points)
+      .reduce((totalPoints, points) => totalPoints + points, 0);
+
     this.score = sum;
 
-    this.hand.filter(card => card.number === "A").forEach(_ => {
-      if (this.score > 21) this.score -= 10;
-    }, this);
+    this.hand
+      .filter(card => card.number === "A")
+      .forEach(_ => {
+        if (this.score > 21) this.score -= 10;
+      }, this);
+
     return this.score;
   }
 
@@ -77,56 +79,56 @@ class Participant {
   }
 
   showHand() {
-    console.log("");
-    if (this.name === "You") console.log("Your hand: ");
-    if (this.name === "Dealer") console.log("Dealer's hand: ");
     let allCards = [];
+    console.log("");
 
-    for (var i = 0; i < this.hand.length; i++) {
-      if ((this.name === "Dealer") && (i === 1)) {
+    for (let idx = 0; idx < this.hand.length; idx++) {
+      if ((this.name === "Dealer") && (idx === 1)) {
         allCards.push(this.hiddenCard);
       } else {
-        allCards.push(this.hand[i].show());
+        allCards.push(this.hand[idx].show());
       }
     }
 
-    for (var i = 0; i < allCards.length; i++) {
-      console.log(`${allCards[i]}`);
+    if (this.name === "You") console.log("Your hand: ");
+    if (this.name === "Dealer") console.log("Dealer's hand: ");
+
+    for (let idx = 0; idx < allCards.length; idx++) {
+      console.log(`${allCards[idx]}`);
     }
   }
 }
 
+Participant.HIDDEN_CARD = `
+     ____
+    | ?? |`;
+
 class Player extends Participant {
   constructor() {
-    super()
+    super();
     this.name = "You";
   }
 }
 
 class Dealer extends Participant {
   constructor() {
-    super()
-    this.name = "Dealer"
+    super();
+    this.name = "Dealer";
   }
 
   reveal() {
     let allCards = [];
-    for (var i = 0; i < this.hand.length; i++) {
-        allCards.push(this.hand[i].show());
+    for (let idx = 0; idx < this.hand.length; idx++) {
+      allCards.push(this.hand[idx].show());
     }
-    for (var i = 0; i < allCards.length; i++) {
-      console.log(`${allCards[i]}`)
+
+    for (let idx = 0; idx < allCards.length; idx++) {
+      console.log(`${allCards[idx]}`);
     }
   }
 }
 
 class TwentyOneGame {
-  static STARTING_BALANCE = 1;
-  static WINNING_BALANCE = 2;
-  static sleep = function(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
   constructor() {
     this.deck = new Deck();
     this.player = new Player();
@@ -141,7 +143,7 @@ class TwentyOneGame {
     this.dealer = new Dealer();
     this.deck = new Deck();
     this.winner = null;
-    }
+  }
 
   getBalance() {
     console.log("");
@@ -150,43 +152,64 @@ class TwentyOneGame {
   }
 
   addToBalance() {
-    return this.playerBalance += 1;
+    this.playerBalance += 1;
   }
 
   subtractFromBalance() {
-    return this.playerBalance -= 1;
+    this.playerBalance -= 1;
   }
 
   async start() {
     this.displayWelcomeMessage();
 
     while (true) {
-      this.dealStartingHands();
-      this.dealer.showHand();
-      this.player.showHand();
-      this.player.getScore();
-      this.playerTurn();
+      this.setupOneGame();
+      this.playOneGame();
 
-      if (!this.winner) {
-        console.clear();
-        this.dealerTurn();
-      }
-      if (!this.winner) {
-        this.player.showHand();
-        this.displayResult();
-      }
-      if (this.winner === this.player.name) this.addToBalance();
-      if (this.winner === this.dealer.name) this.subtractFromBalance();
-
-      this.getBalance();
-
-      if (this.playerBalance === TwentyOneGame.WINNING_BALANCE || this.playerBalance === 0) break;
+      if (this.balanceIsEmpty() || this.balanceIsMax()) break;
 
       this.resetGame();
       await TwentyOneGame.sleep(6500);
       console.clear();
     }
     this.displayGoodbyeMessage();
+  }
+
+  playOneGame() {
+    this.playerTurn();
+
+    if (!this.winner) {
+      console.clear();
+      this.dealerTurn();
+    }
+    if (!this.winner) {
+      this.player.showHand();
+      this.displayResult();
+    }
+
+    this.updateBalance();
+    this.getBalance();
+
+  }
+
+  setupOneGame() {
+    this.dealStartingHands();
+    this.dealer.showHand();
+    this.player.showHand();
+    this.player.getScore();
+  }
+
+  updateBalance() {
+    if (this.winner === this.player.name) this.addToBalance();
+    if (this.winner === this.dealer.name) this.subtractFromBalance();
+  }
+
+  balanceIsMax() {
+    return this.playerBalance === TwentyOneGame.WINNING_BALANCE;
+  }
+
+  balanceIsEmpty() {
+    return this.playerBalance === 0;
   }
 
   dealStartingHands() {
@@ -202,16 +225,22 @@ class TwentyOneGame {
     if (participant === this.dealer) this.dealer.scoreHand();
   }
 
+  hitOrStay() {
+    let validResponses = ['h', 'H', 's', 'S', 'hit', 'stay'];
+    let choice;
+    while (true) {
+      choice = readline.question("Would you like to hit (h) or stay (s)?: ");
+      if (validResponses.includes(choice)) break;
+      console.log("Sorry, that's not a valid choice...");
+    }
+    return choice;
+  }
+
   playerTurn() {
     while (true) {
-      let choice;
-      while (true) {
-        choice = readline.question("Would you like to hit (h) or stay (s)?: ")
-        choice = choice.toLowerCase();
-        if (choice === 'h' || choice === 'hit' || choice === 's' || choice === 'stay') break;
-        console.log("Sorry, that's not a valid choice...");
-      }
-      if (choice[0] === 'h') {
+      let choice = this.hitOrStay();
+
+      if (choice.toLowerCase()[0] === 'h') {
         this.dealCard(this.player);
         console.clear();
         this.player.showHand();
@@ -222,8 +251,7 @@ class TwentyOneGame {
           this.winner = "Dealer";
           break;
         }
-      }
-      else {
+      } else {
         console.log("You picked stay. Your move is over.");
         break;
       }
@@ -253,8 +281,7 @@ class TwentyOneGame {
 
     if (this.dealer.score === this.player.score) {
       console.log("It's a tie!");
-    }
-    else if (!this.winner) {
+    } else if (!this.winner) {
       if (this.player.score > this.dealer.score) {
         this.winner = this.player.name;
       } else if (this.dealer.score > this.player.score) {
@@ -277,6 +304,11 @@ class TwentyOneGame {
   }
 }
 
+TwentyOneGame.STARTING_BALANCE = 5;
+TwentyOneGame.WINNING_BALANCE = 10;
+TwentyOneGame.sleep = function(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
 
 let game = new TwentyOneGame();
 game.start();
