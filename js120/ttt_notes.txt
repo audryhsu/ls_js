@@ -1,0 +1,31 @@
+first player to reach three wins the match
+show the score after each game 
+move play again to after someone wins a match
+
+
+Score be a class and property of the game ?
+ - humanScore state
+ - computerScore state
+
+ - score.show
+ - score.reset -- check context...?
+ - score.humanScores
+ - score.computerScores
+
+game
+ - matchWon? - checks if someone's score is 3. returns human or computer, or null.
+ - matchWinner  - returns human or computer
+
+
+repeat games until match matchWon
+  repeat turns until game won
+  if game won , break
+  update winner's score
+  check if matchWon
+  display score
+  clear board
+
+
+
+board.reset()
+score.reset();

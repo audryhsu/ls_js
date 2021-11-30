@@ -1,0 +1,46 @@
+/*
+There is a deck of 52 cards, 4 suits and number values 2 through 10, jack, ace queen that are worth 10 points, ace are 11 points.
+There are two players, the human and the dealer (computer). Each player gets two cards.
+Only one of the dealer's cards are revealed face up.
+Player's move is first. Player can either hit or stay. Player will want to hit to get closer to 21, but if the hand is over 21, the player has busted and dealer wins.
+Player can hit as many times without busting.
+Dealer goes next and must hit until hand total is 17, then it stops. If dealer busts, human wins.
+If neither bust, then players compare their card values to see who has highest or blackjac,.
+
+ Nouns:
+ - game n
+  - human
+  - dealer
+  - start
+  - deck state
+
+  - deal cards
+    - draw one random card and add to human 2x
+    - draw one random card and add to dealer 2x
+  - show cards (dealers)
+  - compare card values v
+  - win (state )
+  - lose - state
+
+ - deck
+  - number of cards of each type and suit?
+  - reshuffle (restore 52 and random order)
+
+ - card
+    - number and suit ?
+
+ - participant
+  - hand of cards state
+  - points (state)
+  - bust (state)
+  - hit v
+  - stay v
+  - human move (prompt)
+
+
+other details:
+- player starts with 5 dollars
+  - deduct 1 dollar each time lost
+  - add 1 dollar wins
+  - program checks player's balance - if 0 or 10, quit.
+- deck must be reshuffled either after each game or when run out of cards.
