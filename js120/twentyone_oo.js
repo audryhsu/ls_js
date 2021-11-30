@@ -50,10 +50,16 @@ class Participant {
     this.hand = [];
     this.score = null;
     this.hiddenCard = Participant.HIDDEN_CARD;
+
+  }
+
+  resetHand() {
+    this.hand = [];
+    this.score = null;
   }
 
   isBusted() {
-    return this.score > 21;
+    return this.score > Participant.BLACK_JACK;
   }
 
   scoreHand() {
@@ -66,7 +72,7 @@ class Participant {
     this.hand
       .filter(card => card.number === "A")
       .forEach(_ => {
-        if (this.score > 21) this.score -= 10;
+        if (this.score > Participant.BLACK_JACK) this.score -= 10;
       }, this);
 
     return this.score;
@@ -102,11 +108,35 @@ class Participant {
 Participant.HIDDEN_CARD = `
      ____
     | ?? |`;
+Participant.BLACK_JACK = 21;
 
 class Player extends Participant {
   constructor() {
     super();
+    this.playerBalance = TwentyOneGame.STARTING_BALANCE;
     this.name = "You";
+  }
+
+  getBalance() {
+    console.log("");
+    console.log(`Your balance is: ${this.playerBalance} dollars.`);
+    console.log("");
+  }
+
+  addToBalance() {
+    this.playerBalance += 1;
+  }
+
+  subtractFromBalance() {
+    this.playerBalance -= 1;
+  }
+
+  balanceIsMax() {
+    return this.playerBalance === TwentyOneGame.WINNING_BALANCE;
+  }
+
+  balanceIsEmpty() {
+    return this.playerBalance === 0;
   }
 }
 
@@ -127,6 +157,7 @@ class Dealer extends Participant {
     }
   }
 }
+Dealer.MINIMUM_HAND_SCORE = 17;
 
 class TwentyOneGame {
   constructor() {
@@ -134,29 +165,14 @@ class TwentyOneGame {
     this.player = new Player();
     this.dealer = new Dealer();
     this.winner = null;
-    this.playerBalance = TwentyOneGame.STARTING_BALANCE;
   }
 
   resetGame() {
     console.log("Preparing the next game...");
-    this.player = new Player();
-    this.dealer = new Dealer();
+    this.player.resetHand(); // new resetHand method instead of instatiating new Player and Dealer objects
+    this.dealer.resetHand();
     this.deck = new Deck();
     this.winner = null;
-  }
-
-  getBalance() {
-    console.log("");
-    console.log(`Your balance is: ${this.playerBalance} dollars.`);
-    console.log("");
-  }
-
-  addToBalance() {
-    this.playerBalance += 1;
-  }
-
-  subtractFromBalance() {
-    this.playerBalance -= 1;
   }
 
   async start() {
@@ -166,7 +182,7 @@ class TwentyOneGame {
       this.setupOneGame();
       this.playOneGame();
 
-      if (this.balanceIsEmpty() || this.balanceIsMax()) break;
+      if (this.player.balanceIsEmpty() || this.player.balanceIsMax()) break;
 
       this.resetGame();
       await TwentyOneGame.sleep(6500);
@@ -188,7 +204,7 @@ class TwentyOneGame {
     }
 
     this.updateBalance();
-    this.getBalance();
+    this.player.getBalance();
 
   }
 
@@ -200,16 +216,8 @@ class TwentyOneGame {
   }
 
   updateBalance() {
-    if (this.winner === this.player.name) this.addToBalance();
-    if (this.winner === this.dealer.name) this.subtractFromBalance();
-  }
-
-  balanceIsMax() {
-    return this.playerBalance === TwentyOneGame.WINNING_BALANCE;
-  }
-
-  balanceIsEmpty() {
-    return this.playerBalance === 0;
+    if (this.winner === this.player.name) this.player.addToBalance();
+    if (this.winner === this.dealer.name) this.player.subtractFromBalance();
   }
 
   dealStartingHands() {
@@ -261,8 +269,8 @@ class TwentyOneGame {
   dealerTurn() {
     console.log("Dealer's turn...");
     this.dealer.reveal();
-    if (this.dealer.score >= 17) console.log("Dealer stays.");
-    while (this.dealer.score < 17) {
+    if (this.dealer.score >= Dealer.MINIMUM_HAND_SCORE) console.log("Dealer stays.");
+    while (this.dealer.score < Dealer.MINIMUM_HAND_SCORE) {
       console.log("Dealer hits...");
       this.dealCard(this.dealer);
       this.dealer.reveal();
