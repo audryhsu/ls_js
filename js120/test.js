@@ -1,31 +1,13 @@
-// let obj = {
-//   a: 'hello',
-//   b: 'world',
-//   foo: function() {
-//     // let self = this;
-//     function bar() {
-//       console.log(this.a + ' ' + this.b);
-//     }
-//     console.log(this); // obj
-//     bar.call(this);
-//   },
-// };
+let rollMax = 13;
+let rollMin = 2;
+function rollDice() {
+  return Math.floor(Math.random() * (rollMax - rollMin) + rollMin);
+}
 
-// Using bind
-// let obj = {
-//   a: 'hello',
-//   b: 'world',
-//   foo: function() {
-//     // console.log(this); // obj
-//     let bar = function() {
-//       console.log(this.a + ' ' + this.b);
-//     }.bind(this)
-//     // console.log(this); // obj
-//     bar();
-//     bar();
-//     bar();
-//   },
-// };
-// Using Arrow functions
-
-obj.foo();        // => hello world
+console.log(rollDice());
+console.log(rollDice());
+console.log(rollDice());
+console.log(rollDice());
+console.log(rollDice());
+console.log(rollDice());
+console.log(rollDice());
