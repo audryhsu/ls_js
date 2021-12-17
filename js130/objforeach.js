@@ -1,0 +1,5 @@
+/*
+write a forEach method for objects
+write a filter method for objects
+try to use reduce.
+*/
