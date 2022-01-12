@@ -1,6 +1,7 @@
 // Refactor using rest & spread
 function delegate(object, methodName, ...args) {
   console.log(args);
+
   return function () {
     return object[methodName].apply(object, args);
   };
