@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+
+const { Client } = require('pg')
+import { argv } from 'process'; // 
+
+const client = new Client({ database: "expense_project"})
+
+async function logQuery(queryText) {
+  await client.connect();
+
+  let data = await client.query(queryText);
+
+  data.rows.forEach(row => {
+    let date = row.created_on.toDateString()
+    console.log(`${row.id} | ${date} | ${row.amount.padStart(6)} | ${row.memo.padStart(15)}`)
+  })
+
+  client.end();
+}
+
+let query = `SELECT * from expenses ORDER BY created_on ASC`;
+
+logQuery(query);
