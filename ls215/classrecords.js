@@ -75,7 +75,7 @@ function generateClassRecordSummary(scores) {
   let allStudentExams = students.map(student => student.scores.exams); // array of student exam arrays
 
   let scoresByExam = organizeExamScores(allStudentExams);
-  let exams = scoresByExam.map(scoresArrayb => getExamStats(scoresArray));
+  let exams = scoresByExam.map(scoresArray => getExamStats(scoresArray));
 
   return {studentGrades, exams };
 }
@@ -129,7 +129,7 @@ function weightScores(score1, score2, weight1, weight2) {
 
 function averageExamScores(scores) {
   return sumScores(scores) / scores.length;
-}g;
+}
 
 function sumScores(scores) {
   return scores.reduce((total, currentValue) => total + currentValue);
