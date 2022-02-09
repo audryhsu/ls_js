@@ -33,7 +33,7 @@ function longestSentence(text) {
     return result;
   }, initialObj);
 
-  console.log(longegstObj.sentence);
+  console.log(longestObj.sentence);
   console.log(`The longest sentence has ${longestObj.wordCount} words.`);
 }
 

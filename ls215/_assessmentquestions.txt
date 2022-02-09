@@ -1,0 +1,59 @@
+- General questions
+
+  - Is the type of argument always going to be the same?
+  - Can the function take and handle different types of inputs, such as numbers, strings, booleans, and objects?
+  - What about empty inputs, null, undefined?
+  - Is there a chance that arguments might be omitted or more arguments sent than the function is defined to take?
+  - What should I consider as invalid input and what should we do with them?
+
+- Numbers
+  - zeros or leading zeros in strings? if counting leading 0s, what about ending 0s?
+  - if zeros, what about values that evaluate to 0 when coerced into a number?
+  - negative numbers?
+  - fractional numbers (e.g., 0.567)?
+  - special values (e.g., NaN, Infinity)?
+  - can numbers be represented as string digits?
+
+- Strings
+  - empty string (e.g., '')?
+  - case sensitivity?
+  - only a specific type of char? alphabetic, numeric or special chars?
+  - what about reserved words in string format like undefined or null?
+  - how should we deal with duplicate/repeated chars?
+  - what about leading 0s if string digits?  if counting leading 0s, what about ending 0s?
+  - if words or sentences, how are they delimited? space, multiple spaces, non-alphabetic characters
+
+- Arrays
+  - Mutate array argument?
+  - empty array(e.g.[])?
+  - how about unset elements - "sparse array" (e.g, [1, , 2]) ?
+  - how about object properties - (e.g., [1, 2, a: "A"])?
+  - One-dimensional or nested array? If nested, what elements will the nested arrays contain?
+    - If matrix: what if an inner array has different length?
+
+- Booleans
+  - Coerced to Number 0 or 1 (false or true)
+- Objects
+  - Mutate object argument?
+- Functions
+
+Test cases:
+- Do I have all of the requirements enumerated?
+- Do I have a test case for every requirements
+- Do test cases cover all invalid inputs?
+
+Todos:
+- practice identifying implicit rules and converting to explicit rules
+- focus on developing test cases and handling them all
+  - consider ALL input variations
+- arrays with empty slots? "sparse" arrays
+- arrays with null or undefined values?
+- Revisit Version problem
+
+
+Shortcuts:
+- check for empty array -
+- comparing arrays - use every, some, or loops
+- find most common character in an array
+- comparing objects
+- transpose array (double loop, i, j, where j < i, use a temp to swap values)
