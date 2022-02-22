@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+
+      document.addEventListener('keydown', (event) => {
+        let lines = [document.querySelector('.x .horizontal'), document.querySelector('.x .vertical')]
+        let color;
+        switch (event.key) {
+          case 'b':
+            color = 'blue'
+            break;
+          case 'g':
+            color = 'green'
+            break;
+          case 'r':
+            color = 'red'
+            break;
+        }
+        lines.forEach((line, _) => {
+          line.style.background = color
+        });
+      });
+      document.addEventListener('mousemove', (event) => {
+        let x = document.querySelector('.x')
+        let [xpos, ypos] = [event.clientX, event.clientY]
+        x.style.left = String(xpos) + 'px'
+        x.style.top = String(ypos) + 'px'
+      });
+    })
+  </script>
+  <style media="screen">
+    .x {
+      position: absolute;
+      transform: rotate(45deg);
+      top: 20px;
+      left: 20px;
+    }
+
+    .x .horizontal {
+      width: 45px;
+      height: 5px;
+      position: absolute;
+      left: -20px;
+      background: red;
+    }
+
+    .x .vertical {
+      height: 45px;
+      width: 5px;
+      background: red;
+      position: absolute;
+      left: 0px;
+      top: -20px;
+    }
+  </style>
+  <meta charset="utf-8">
+  <title></title>
+</head>
+
+<body>
+  <div class="x">
+    <div class="horizontal"> </div>
+    <div class="vertical"></div>
+  </div>
+</body>
+
+</html>
